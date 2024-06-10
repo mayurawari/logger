@@ -1,4 +1,5 @@
 import fs from "fs";
+import express from "express";
 import winston from "winston";
 import mongodb from "mongodb";
 import { MongoClient } from "mongodb";
@@ -7,8 +8,10 @@ import {config} from "dotenv";
 config();
 
 const uri=process.env.URI || null;
+const port=process.env.PORT || 9090;
 const client=new MongoClient(uri);
 
+const app=express();
 
 const logger=winston.createLogger({
     transports:[
@@ -70,3 +73,7 @@ cron.schedule('0 0 */12 * *', () => {
     await connecttodb();
   }
   startserver();
+
+  app.listen(port,()=>{
+    console.log("server started on port 8080");
+  })
